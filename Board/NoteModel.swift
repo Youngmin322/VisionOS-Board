@@ -7,18 +7,51 @@
 
 import Foundation
 import RealityKit
+import SwiftUI
 
-class NoteModel {
+@Observable
+class NoteModel: Identifiable {
     var entity: Entity?
     var content: String = "Hello"
     var id: UUID = UUID()
     
     init (content: String) {
         self.content = content
-        
-        var material = SimpleMaterial(color: .yellow, isMetallic: false)
-        material.metallic = 0
-        material.roughness = 1
-        self.entity = ModelEntity(mesh: .generateBox(size: .init(0.1, 0.1, 0.001)), materials: [material])
+        entity = Entity.creatNote()
     }
+}
+
+struct NoteView: View {
+    @Binding var content: String
+    @State var isEditing: Bool = false
+    var body: some View {
+        VStack(alignment: .trailing) {
+            Button {
+                isEditing.toggle()
+            } label: {
+                isEditing ? Image(systemName: "checkmark") : Image(systemName: "pencil")
+            }
+            .controlSize(.mini)
+            .frame(width: 27)
+            
+            if isEditing {
+                TextEditor(text: $content)
+                    .font(.system(size: 10))
+                    .foregroundStyle(.black)
+            } else {
+                Text(content)
+                    .font(.system(size: 10))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .foregroundStyle(.black)
+                    .padding(.top, 3)
+                    .padding(.leading, 5)
+            }
+        }
+        .frame(width:130, height: 140)
+    }
+}
+
+#Preview(windowStyle: .automatic, traits: .fixedLayout(width: 150, height: 150)) {
+    @Previewable @State var text = "hello"
+    NoteView(content: $text)
 }

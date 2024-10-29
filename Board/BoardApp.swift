@@ -6,29 +6,20 @@
 //
 
 import SwiftUI
+import RealityKitContent
 
 @main
 struct BoardApp: App {
-
-    @State private var appModel = AppModel()
+    
+    init() {
+        RealityKitContent.GestureComponent.registerComponent()
+    }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(appModel)
+            BoardScene()
         }
         .windowStyle(.volumetric)
-
-        ImmersiveSpace(id: appModel.immersiveSpaceID) {
-            ImmersiveView()
-                .environment(appModel)
-                .onAppear {
-                    appModel.immersiveSpaceState = .open
-                }
-                .onDisappear {
-                    appModel.immersiveSpaceState = .closed
-                }
-        }
-        .immersionStyle(selection: .constant(.mixed), in: .mixed)
+        .defaultSize(width: 1.5, height: 1, depth: 0.2, in: .meters)
     }
 }

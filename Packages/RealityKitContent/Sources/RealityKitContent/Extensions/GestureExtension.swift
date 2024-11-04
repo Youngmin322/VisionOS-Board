@@ -17,3 +17,16 @@ extension Gesture where Value == EntityTargetValue<TapGesture.Value> {
         }
     }
 }
+
+extension Gesture where Value == EntityTargetValue<DragGesture.Value> {
+    @MainActor public func useGestureComponent() -> some Gesture {
+        onChanged { value in
+            guard var gestureComponent = value.entity.gestureComponent else { return }
+            gestureComponent.onChanged(value: value)
+        }
+        .onEnded { value in
+            guard var gestureComponet = value.entity.gestureComponent else { return }
+            gestureComponet.onEnded(value: value)
+        }
+    }
+}

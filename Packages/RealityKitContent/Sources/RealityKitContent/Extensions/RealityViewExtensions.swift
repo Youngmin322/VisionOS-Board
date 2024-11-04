@@ -10,11 +10,18 @@ import SwiftUI
 
 public extension RealityView {
     func installAllGestures() -> some View {
-        gesture(tapGesture)
+        simultaneousGesture(tapGesture)
+            .simultaneousGesture(dragGesture)
     }
     
     var tapGesture: some Gesture {
         TapGesture()
+            .targetedToAnyEntity()
+            .useGestureComponent()
+    }
+    
+    var dragGesture: some Gesture {
+        DragGesture()
             .targetedToAnyEntity()
             .useGestureComponent()
     }

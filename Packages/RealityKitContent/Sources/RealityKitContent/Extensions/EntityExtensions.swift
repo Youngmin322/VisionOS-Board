@@ -10,6 +10,11 @@ import RealityKit
 
 extension Entity {
     
+    var scenePosition: SIMD3<Float> {
+        get { position(relativeTo: nil) }
+        set { setPosition(newValue, relativeTo: nil) }
+    }
+    
     var gestureComponent: GestureComponent? {
         get { components[GestureComponent.self] }
         set { components[GestureComponent.self] = newValue }
@@ -26,7 +31,7 @@ extension Entity {
         entity.components.set([HoverEffectComponent(), InputTargetComponent()])
         entity.generateCollisionShapes(recursive: false)
         
-        return entity
+        return entity	
     }
     
     static public func createBoard() -> Entity? {
@@ -38,3 +43,4 @@ extension Entity {
         return entity
     }
 }
+ 

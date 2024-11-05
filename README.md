@@ -1,1 +1,2 @@
-VisionOS Idea Share Board App
+VisionOS Idea Board App README
+=============

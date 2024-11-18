@@ -29,7 +29,7 @@ struct BoardScene: View {
                     if let noteAttach = attachments.entity(for: note.id),
                        let noteEntity = note.entity {
                         noteEntity.addChild(noteAttach)
-                        noteAttach.setPosition(.init(0.0, 0.0, 0.001),
+                        noteAttach.setPosition(.init(0.0, 0.0, 0.002),
                                                relativeTo: noteEntity)
                     }
                 }

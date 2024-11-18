@@ -12,6 +12,8 @@ class EntityGestureState: Codable {
     var targetEntity: UInt64?
     var dragStartPosition: SIMD3<Float> = .zero
     var isDragging: Bool = false
+    var startOrientation: Rotation3D = .identity
+    var isRotating = false
 }
 
 @MainActor
@@ -19,6 +21,7 @@ public struct GestureComponent: Component, Codable {
     var canDrag = true
     var canTap = true
     var isYellow = true
+    var canRotate = true
     
     static var shared = EntityGestureState()
     
@@ -80,6 +83,30 @@ public struct GestureComponent: Component, Codable {
         let state = GestureComponent.shared
         state.isDragging = false
         state.targetEntity = nil
+    }
+    
+    mutating func onChanged(value: EntityTargetValue<RotateGesture3D.Value>) {
+        let state = GestureComponent.shared
+        guard canRotate, !state.isRotating else { return }
+        
+        let entity = value.entity
+        
+        if !state.isRotating {
+            state.isRotating = true
+            state.startOrientation = .init(entity.orientation(relativeTo: nil))
+        }
+        
+        let rotation = value.rotation
+        
+        let newRotation = Rotation3D(angle: rotation.angle, axis: RotationAxis3D(x: 0, y: 0, z: rotation.axis.z))
+        
+        let newOrientation = state.startOrientation.rotated(by: newRotation)
+        
+        entity.setOrientation(.init(newOrientation), relativeTo: nil)
+    }
+    
+    mutating func onEnded(value: EntityTargetValue<RotateGesture3D.Value>) {
+        GestureComponent.shared.isRotating = false
     }
 }
 

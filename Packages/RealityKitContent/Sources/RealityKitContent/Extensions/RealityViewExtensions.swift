@@ -12,6 +12,7 @@ public extension RealityView {
     func installAllGestures() -> some View {
         simultaneousGesture(tapGesture)
             .simultaneousGesture(dragGesture)
+            .simultaneousGesture(rotateGesture)
     }
     
     var tapGesture: some Gesture {
@@ -22,6 +23,12 @@ public extension RealityView {
     
     var dragGesture: some Gesture {
         DragGesture()
+            .targetedToAnyEntity()
+            .useGestureComponent()
+    }
+    
+    var rotateGesture: some Gesture {
+        RotateGesture3D()
             .targetedToAnyEntity()
             .useGestureComponent()
     }
